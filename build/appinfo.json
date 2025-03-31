@@ -1,0 +1,30 @@
+{
+    "targetPlatforms": [
+        "aplite", 
+        "basalt", 
+        "chalk", 
+        "diorite"
+    ], 
+    "displayName": "customAnalogInC", 
+    "name": "customAnalogInC", 
+    "messageKeys": {
+        "dummy": 10000
+    }, 
+    "companyName": "JessicaCrowson", 
+    "enableMultiJS": true, 
+    "versionLabel": "1.0", 
+    "capabilities": [], 
+    "sdkVersion": "3", 
+    "appKeys": {
+        "dummy": 10000
+    }, 
+    "longName": "customAnalogInC", 
+    "shortName": "customAnalogInC", 
+    "watchapp": {
+        "watchface": true
+    }, 
+    "resources": {
+        "media": []
+    }, 
+    "uuid": "16878687-a1a7-4e45-9250-3cad1ea5479a"
+}
