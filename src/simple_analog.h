@@ -3,6 +3,21 @@
 #include "pebble.h"
 
 #define NUM_CLOCK_TICKS 11
+#ifdef PBL_PLATFORM_EMERY
+  #define DAY_LABEL_FONT FONT_KEY_GOTHIC_24
+  #define NUM_LABEL_FONT FONT_KEY_GOTHIC_24_BOLD
+#else
+  #define DAY_LABEL_FONT FONT_KEY_GOTHIC_18
+  #define NUM_LABEL_FONT FONT_KEY_GOTHIC_18_BOLD
+#endif
+//All base points defined for 144x168 screen, will be transformed for other screen sizes in code
+#define BASE_DAY_LABEL_OFFSET_x -30
+#define BASE_DAY_LABEL_OFFSET_y 30
+#define BASE_NUM_LABEL_OFFSET_x 1
+#define BASE_NUM_LABEL_OFFSET_y 30
+#define BASE_LABEL_WIDTH_DAY 27
+#define BASE_LABEL_HEIGHT 20
+#define BASE_LABEL_WIDTH_NUM 18
 
 static const struct GPathInfo ANALOG_BG_POINTS[] = {
   { 4,

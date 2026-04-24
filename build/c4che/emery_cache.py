@@ -3,9 +3,9 @@ ARFLAGS = ['rcs']
 AS = 'arm-none-eabi-gcc'
 BINDIR = '/usr/local/bin'
 BLOCK_MESSAGE_KEYS = []
-BUILD_DIR = 'basalt'
+BUILD_DIR = 'emery'
 BUILD_TYPE = 'app'
-BUNDLE_BIN_DIR = 'basalt'
+BUNDLE_BIN_DIR = 'emery'
 BUNDLE_NAME = 'customAnalogInC.pbw'
 CC = ['arm-none-eabi-gcc']
 CCLNK_SRC_F = []
@@ -18,12 +18,12 @@ CFLAGS = ['-std=c99', '-mcpu=cortex-m3', '-mthumb', '-ffunction-sections', '-fda
 CFLAGS_MACBUNDLE = ['-fPIC']
 CFLAGS_cshlib = ['-fPIC']
 CPPPATH_ST = '-I%s'
-DEFINES = ['RELEASE', 'PBL_PLATFORM_BASALT', 'PBL_COLOR', 'PBL_RECT', 'PBL_MICROPHONE', 'PBL_SMARTSTRAP', 'PBL_HEALTH', 'PBL_COMPASS', 'PBL_SMARTSTRAP_POWER', 'PBL_DISPLAY_WIDTH=144', 'PBL_DISPLAY_HEIGHT=168', 'PBL_SDK_FROZEN', 'PBL_SDK_3']
+DEFINES = ['RELEASE', 'PBL_PLATFORM_EMERY', 'PBL_COLOR', 'PBL_RECT', 'PBL_MICROPHONE', 'PBL_SMARTSTRAP', 'PBL_HEALTH', 'PBL_SMARTSTRAP_POWER', 'PBL_COMPASS', 'PBL_DISPLAY_WIDTH=200', 'PBL_DISPLAY_HEIGHT=228', 'PBL_SDK_3']
 DEFINES_ST = '-D%s'
 DEST_BINFMT = 'elf'
 DEST_CPU = 'arm'
 DEST_OS = 'linux'
-INCLUDES = ['basalt']
+INCLUDES = ['emery']
 LD = 'arm-none-eabi-ld'
 LIBDIR = '/usr/local/lib64'
 LIBPATH_ST = '-L%s'
@@ -41,10 +41,10 @@ MESSAGE_KEYS_HEADER = '/home/jessica/PebbleProjects/customAnalogInC/build/includ
 MESSAGE_KEYS_JSON = '/home/jessica/PebbleProjects/customAnalogInC/build/js/message_keys.json'
 NODE_PATH = '/home/jessica/.pebble-sdk/SDKs/current/node_modules'
 PEBBLE_SDK_COMMON = '/home/jessica/.pebble-sdk/SDKs/current/sdk-core/pebble/common'
-PEBBLE_SDK_PLATFORM = '/home/jessica/.pebble-sdk/SDKs/current/sdk-core/pebble/basalt'
+PEBBLE_SDK_PLATFORM = '/home/jessica/.pebble-sdk/SDKs/current/sdk-core/pebble/emery'
 PEBBLE_SDK_ROOT = '/home/jessica/.pebble-sdk/SDKs/current/sdk-core/pebble'
-PLATFORM = {'NAME': 'basalt', 'MAX_APP_BINARY_SIZE': 65536, 'MAX_APP_MEMORY_SIZE': 65536, 'MAX_WORKER_MEMORY_SIZE': 10240, 'MAX_RESOURCES_SIZE_APPSTORE': 262144, 'MAX_RESOURCES_SIZE': 1048576, 'DEFINES': ['PBL_PLATFORM_BASALT', 'PBL_COLOR', 'PBL_RECT', 'PBL_MICROPHONE', 'PBL_SMARTSTRAP', 'PBL_HEALTH', 'PBL_COMPASS', 'PBL_SMARTSTRAP_POWER', 'PBL_DISPLAY_WIDTH=144', 'PBL_DISPLAY_HEIGHT=168', 'PBL_SDK_FROZEN'], 'FROZEN_AT_REVISION': 89, 'BUILD_DIR': 'basalt', 'BUNDLE_BIN_DIR': 'basalt', 'ADDITIONAL_TEXT_LINES_FOR_PEBBLE_H': [], 'MAX_FONT_GLYPH_SIZE': 256, 'TAGS': ['basalt', 'color', 'rect', 'mic', 'strap', 'strappower', 'compass', 'health', '144w', '168h']}
-PLATFORM_NAME = 'basalt'
+PLATFORM = {'NAME': 'emery', 'MAX_APP_BINARY_SIZE': 131072, 'MAX_APP_MEMORY_SIZE': 131072, 'MAX_WORKER_MEMORY_SIZE': 10240, 'MAX_RESOURCES_SIZE_APPSTORE': 262144, 'MAX_RESOURCES_SIZE': 1048576, 'DEFINES': ['PBL_PLATFORM_EMERY', 'PBL_COLOR', 'PBL_RECT', 'PBL_MICROPHONE', 'PBL_SMARTSTRAP', 'PBL_HEALTH', 'PBL_SMARTSTRAP_POWER', 'PBL_COMPASS', 'PBL_DISPLAY_WIDTH=200', 'PBL_DISPLAY_HEIGHT=228'], 'BUILD_DIR': 'emery', 'BUNDLE_BIN_DIR': 'emery', 'ADDITIONAL_TEXT_LINES_FOR_PEBBLE_H': [], 'MAX_FONT_GLYPH_SIZE': 512, 'TAGS': ['emery', 'color', 'rect', 'mic', 'strap', 'health', 'strappower', 'compass', '200w', '228h']}
+PLATFORM_NAME = 'emery'
 PREFIX = '/usr/local'
 PROJECT_INFO = {'displayName': 'customAnalogInC', 'uuid': '16878687-a1a7-4e45-9250-3cad1ea5479a', 'sdkVersion': '3', 'enableMultiJS': True, 'targetPlatforms': ['basalt', 'emery'], 'watchapp': {'watchface': True}, 'messageKeys': {'dummy': 10000}, 'resources': {'media': []}, 'name': 'customAnalogInC', 'shortName': 'customAnalogInC', 'longName': 'customAnalogInC', 'versionLabel': '1.0', 'companyName': 'JessicaCrowson', 'appKeys': {'dummy': 10000}}
 REQUESTED_PLATFORMS = ['basalt', 'emery']
@@ -52,7 +52,7 @@ RESOURCES_JSON = []
 RPATH_ST = '-Wl,-rpath,%s'
 SANDBOX = False
 SDK_VERSION_MAJOR = 5
-SDK_VERSION_MINOR = 86
+SDK_VERSION_MINOR = 89
 SHLIB_MARKER = None
 SIZE = 'arm-none-eabi-size'
 SONAME_ST = '-Wl,-h,%s'

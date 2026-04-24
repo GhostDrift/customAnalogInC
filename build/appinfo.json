@@ -1,30 +1,28 @@
 {
+    "displayName": "customAnalogInC",
+    "uuid": "16878687-a1a7-4e45-9250-3cad1ea5479a",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
     "targetPlatforms": [
-        "aplite", 
-        "basalt", 
-        "chalk", 
-        "diorite"
-    ], 
-    "displayName": "customAnalogInC", 
-    "name": "customAnalogInC", 
-    "messageKeys": {
-        "dummy": 10000
-    }, 
-    "companyName": "JessicaCrowson", 
-    "enableMultiJS": true, 
-    "versionLabel": "1.0", 
-    "capabilities": [], 
-    "sdkVersion": "3", 
-    "appKeys": {
-        "dummy": 10000
-    }, 
-    "longName": "customAnalogInC", 
-    "shortName": "customAnalogInC", 
+        "basalt",
+        "emery"
+    ],
     "watchapp": {
         "watchface": true
-    }, 
+    },
+    "messageKeys": {
+        "dummy": 10000
+    },
     "resources": {
         "media": []
-    }, 
-    "uuid": "16878687-a1a7-4e45-9250-3cad1ea5479a"
+    },
+    "name": "customAnalogInC",
+    "shortName": "customAnalogInC",
+    "longName": "customAnalogInC",
+    "versionLabel": "1.0",
+    "companyName": "JessicaCrowson",
+    "appKeys": {
+        "dummy": 10000
+    },
+    "capabilities": []
 }

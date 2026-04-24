@@ -12,6 +12,10 @@ static char s_num_buffer[4], s_day_buffer[6];
 //define variable to save the battery level to
 static int s_battery_level;
 static GColor s_battery_color;
+static GPathInfo s_adjusted_bg_points[NUM_CLOCK_TICKS];
+static GPathInfo s_adjusted_date_box_points[1];
+static GPathInfo s_adjusted_minute_hand_points[1];
+static GPathInfo s_adjusted_hour_hand_points[1];
 
 static void bg_update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_fill_color(ctx, GColorBlack);
@@ -105,6 +109,26 @@ static void battery_callback(BatteryChargeState state){
   layer_mark_dirty(s_battery_layer);
 }
 
+//Helper function to scale and recenter GPathInfo Points for current screen size
+static void scale_gpath_info(const GPathInfo *source, GPathInfo *dest, float scale_x, float scale_y, GPoint center){
+  dest->num_points = source->num_points;
+  dest->points = malloc(sizeof(GPoint) * dest->num_points);
+  for (uint32_t i = 0; i < source->num_points; ++i) {
+    int base_x = source->points[i].x;
+    int base_y = source->points[i].y;
+
+    //Calculate offset from base center (72, 84)
+    int offset_x = base_x - 72;
+    int offset_y = base_y - 84;
+
+    //Scale and recenter
+    int new_x = (int)(offset_x * scale_x) + center.x;
+    int new_y = (int)(offset_y * scale_y) + center.y;
+
+    dest->points[i] = GPoint(new_x, new_y);
+  }
+}
+
 static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed) {
   layer_mark_dirty(window_get_root_layer(window));
 }
@@ -112,6 +136,7 @@ static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed) {
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
+  GPoint center = grect_center_point(&bounds);
 
   s_simple_bg_layer = layer_create(bounds);
   layer_set_update_proc(s_simple_bg_layer, bg_update_proc);
@@ -120,23 +145,33 @@ static void window_load(Window *window) {
   s_date_layer = layer_create(bounds);
   layer_set_update_proc(s_date_layer, date_update_proc);
   layer_add_child(window_layer, s_date_layer);
-  //setup the weekday label
-  s_day_label = text_layer_create(GRect(42, 114, 27, 20));
-  // s_day_label = text_layer_create(GRect(bounds.size.w / 2 -1 + 20, bounds.size.h / 2 - 15, 27, 20));
+
+  //Recalculate scale factors (same as init)
+  float scale_x = (float)bounds.size.w / 144.0f; //Base widht for Pebble Time
+  float scale_y = (float)bounds.size.h / 168.0f; //Base height for Pebble Time
+
+  //setup the weekday label with scalled position
+  int scalled_day_x = (int)(BASE_DAY_LABEL_OFFSET_x * scale_x) + center.x;
+  int scalled_day_y = (int)(BASE_DAY_LABEL_OFFSET_y * scale_y) + center.y;
+  int scalled_day_height = (int)(BASE_LABEL_HEIGHT * scale_y) + center.y;
+  s_day_label = text_layer_create(GRect(scalled_day_x, scalled_day_y, BASE_LABEL_WIDTH_DAY, scalled_day_height));
   text_layer_set_text(s_day_label, s_day_buffer);
   text_layer_set_background_color(s_day_label, GColorBlack);
   text_layer_set_text_color(s_day_label, GColorChromeYellow);
-  text_layer_set_font(s_day_label, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  text_layer_set_font(s_day_label, fonts_get_system_font(DAY_LABEL_FONT));
 
   layer_add_child(s_date_layer, text_layer_get_layer(s_day_label));
 
   //setup the day of the month label 
-  s_num_label = text_layer_create(GRect(73, 114, 18, 20));
-  // s_num_label = text_layer_create(GRect(bounds.size.w / 2 -1 + 47, bounds.size.h / 2 - 15, 18, 20));
+  int scalled_num_x = (int)(BASE_NUM_LABEL_OFFSET_x * scale_x) + center.x;
+  int scalled_num_y = (int)(BASE_NUM_LABEL_OFFSET_y * scale_y) + center.y;
+  int scalled_num_width = (int)(BASE_LABEL_WIDTH_NUM * scale_x) + center.x;
+  int scalled_num_height = (int)(BASE_LABEL_HEIGHT * scale_y) + center.y;
+  s_num_label = text_layer_create(GRect(scalled_num_x, scalled_num_y, scalled_num_width, scalled_num_height));
   text_layer_set_text(s_num_label, s_num_buffer);
   text_layer_set_background_color(s_num_label, GColorClear);
   text_layer_set_text_color(s_num_label, GColorBlack);
-  text_layer_set_font(s_num_label, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_font(s_num_label, fonts_get_system_font(NUM_LABEL_FONT));
 
   layer_add_child(s_date_layer, text_layer_get_layer(s_num_label));
 
@@ -174,22 +209,31 @@ static void init() {
   s_day_buffer[0] = '\0';
   s_num_buffer[0] = '\0';
 
-  // init hand paths
-  s_minute_arrow = gpath_create(&MINUTE_HAND_POINTS);
-  s_hour_arrow = gpath_create(&HOUR_HAND_POINTS);
-  
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
   GPoint center = grect_center_point(&bounds);
+
+  //Calculate scale factors and adjust tick points for current screen size
+  float scale_x = (float)bounds.size.w / 144.0f; //Base widht for Pebble Time
+  float scale_y = (float)bounds.size.h / 168.0f; //Base height for Pebble Time
+
+  // init hand paths
+  scale_gpath_info(&MINUTE_HAND_POINTS, &s_adjusted_minute_hand_points[0], scale_x, scale_y, center);
+  s_minute_arrow = gpath_create(&s_adjusted_minute_hand_points[0]);
+  scale_gpath_info(&HOUR_HAND_POINTS, &s_adjusted_hour_hand_points[0], scale_x, scale_y, center);
+  s_hour_arrow = gpath_create(&s_adjusted_hour_hand_points[0]);
+  
   gpath_move_to(s_minute_arrow, center);
   gpath_move_to(s_hour_arrow, center);
 
-  //init date box path
-  s_date_box = gpath_create(&DATE_BOX_POINTS);
-
   for (int i = 0; i < NUM_CLOCK_TICKS; ++i) {
-    s_tick_paths[i] = gpath_create(&ANALOG_BG_POINTS[i]);
-  }
+    scale_gpath_info(&ANALOG_BG_POINTS[i], &s_adjusted_bg_points[i], scale_x, scale_y, center);
+    s_tick_paths[i] = gpath_create(&s_adjusted_bg_points[i]);
+  } 
+
+  //init date box path
+  scale_gpath_info(&DATE_BOX_POINTS, &s_adjusted_date_box_points[0], scale_x, scale_y, center);
+  s_date_box = gpath_create(&s_adjusted_date_box_points[0]);
 
   tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
 
@@ -204,7 +248,9 @@ static void deinit() {
   gpath_destroy(s_hour_arrow);
   gpath_destroy(s_date_box);
 
+  free(s_adjusted_date_box_points[0].points); // Free the allocated points array for date box
   for (int i = 0; i < NUM_CLOCK_TICKS; ++i) {
+    free(s_adjusted_bg_points[i].points); // Free the allocated points array
     gpath_destroy(s_tick_paths[i]);
   }
 
